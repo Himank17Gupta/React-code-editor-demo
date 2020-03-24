@@ -1,7 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import AceEditor from "react-ace";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-terminal";
@@ -10,28 +10,12 @@ import "ace-builds/src-noconflict/mode-jsx";
 
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import "ace-builds/src-min-noconflict/ext-language_tools";
+import Question from "../src/Question";
+import OutPut from './OutPut';
 
-const languages = [
-  "javascript",
-  "java",
-  "c_cpp",
-  "python",
-  "typescript",
-  "sql"
-];
+const languages = [ "javascript","java","c_cpp","python","typescript","sql"];
 
-const themes = [
-  "monokai",
-  "github",
-  "tomorrow",
-  "kuroir",
-  "twilight",
-  "xcode",
-  "textmate",
-  "solarized_dark",
-  "solarized_light",
-  "terminal"
-];
+const themes = [ "monokai", "github", "tomorrow", "kuroir", "twilight", "xcode", "textmate", "solarized_dark", "solarized_light", "terminal"];
 
 languages.forEach(lang => {
   require(`ace-builds/src-noconflict/mode-${lang}`);
@@ -42,12 +26,13 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 /*eslint-disable no-alert, no-console */
 
 
-const defaultValue = `function signature if wanted to be present...can be changed from default value prop`;
+const defaultValue = `//Complete function given below`;
 
 class App extends React.Component {
 
 onSubmit(){
 console.log("Submit  \n "+ this.state.value);
+this.setState({output:true});
 }
 
 onRun(){
@@ -57,6 +42,7 @@ onRun(){
   onLoad() {
     console.log("i've loaded");
   }
+
   onChange(newValue) {
    // console.log("change", newValue);
     this.setState({
@@ -64,15 +50,15 @@ onRun(){
     });
   }
 
-  onSelectionChange(newValue, event) {
-    console.log("select-change", newValue);
-    console.log("select-change-event", event);
-  }
+  // onSelectionChange(newValue, event) {
+  //   console.log("select-change", newValue);
+  //   console.log("select-change-event", event);
+  // }
 
-  onCursorChange(newValue, event) {
-    console.log("cursor-change", newValue);
-    console.log("cursor-change-event", event);
-  }
+  // onCursorChange(newValue, event) {
+  //   console.log("cursor-change", newValue);
+  //   console.log("cursor-change-event", event);
+  // }
 
   onValidate(annotations) {
     console.log("onValidate", annotations);
@@ -117,7 +103,8 @@ onRun(){
       showPrintMargin: true,
       highlightActiveLine: true,
       enableSnippets: true,
-      showLineNumbers: true
+      showLineNumbers: true,
+      output:false
     };
     this.setPlaceholder = this.setPlaceholder.bind(this);
     this.setTheme = this.setTheme.bind(this);
@@ -130,10 +117,10 @@ onRun(){
   }
   render() {
     return (
-      <div className="rows">
+      <div className="columns">
         <div className="row">
-          <div className="">
-            <label>Mode:</label>
+          <div className="col-md">
+            <label>Language:</label>
             <p className="control">
               <span className="select">
                 <select
@@ -151,7 +138,7 @@ onRun(){
             </p>
           </div>
 
-          <div className="field">
+          <div className="col-md">
             <label>Theme:</label>
             <p className="control">
               <span className="select">
@@ -170,7 +157,7 @@ onRun(){
             </p>
           </div>
 
-          <div className="field">
+          {/* <div className="col-md">
             <label>Font Size:</label>
             <p className="control">
               <span className="select">
@@ -187,10 +174,10 @@ onRun(){
                 </select>
               </span>
             </p>
-          </div>
+          </div> */}
 
 
-          <div className="field">
+          <div className="col-md">
             <p className="control">
               <label className="checkbox">
                 <input
@@ -207,7 +194,7 @@ onRun(){
               </label>
             </p>
           </div>
-          <div className="field">
+          <div className="col-md">
             <p className="control">
               <label className="checkbox">
                 <input
@@ -224,7 +211,7 @@ onRun(){
               </label>
             </p>
           </div>
-          <div className="field">
+          <div className="col-md">
             <p className="control">
               <label className="checkbox">
                 <input
@@ -238,7 +225,7 @@ onRun(){
               </label>
             </p>
           </div>
-          <div className="field">
+          <div className="col-md">
             <p className="control">
               <label className="checkbox">
                 <input
@@ -252,7 +239,7 @@ onRun(){
               </label>
             </p>
           </div>
-          <div className="field">
+          <div className="col-md">
             <p className="control">
               <label className="checkbox">
                 <input
@@ -266,7 +253,7 @@ onRun(){
               </label>
             </p>
           </div>
-          <div className="field">
+          <div className="col-md">
             <p className="control">
               <label className="checkbox">
                 <input
@@ -280,7 +267,7 @@ onRun(){
               </label>
             </p>
           </div>
-          <div className="field">
+          <div className="col-md">
             <p className="control">
               <label className="checkbox">
                 <input
@@ -295,12 +282,16 @@ onRun(){
             </p>
           </div>
         </div>
-        <div className="examples column">
-          <h2>Editor</h2>
-          <button onClick={this.onRun}>Run</button>
-          <button onClick={this.onSubmit}>Submit</button>
-
+        <br/>
+        <div className="row">
+          <div className="col-md">
+            <Question/>
+            <br/>
+            {this.state.output?<OutPut/>:<></>}
+          </div>
+        <div className="examples col-md">
           <AceEditor
+            width="90%"
             placeholder={this.state.placeholder}
             mode={this.state.mode}
             theme={this.state.theme}
@@ -326,8 +317,12 @@ onRun(){
               tabSize: 1
             }}
           />
+          <br/>
+           <button className="btn btn-info " onClick={this.onRun}>Run</button>
+          &nbsp;&nbsp;
+          <button className="btn btn-info " onClick={this.onSubmit}>Submit</button>
         </div>
-
+      </div>
       </div>
     );
   }
