@@ -26,19 +26,32 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 /*eslint-disable no-alert, no-console */
 
 
-const defaultValue = `//Complete function given below`;
+const defaultValue = `//Complete function given below
+public function factorial(int n){
+
+}
+`;
 
 class App extends React.Component {
 
 onSubmit(){
+  this.setState({output:true});
 console.log("Submit  \n "+ this.state.value);
-this.setState({output:true});
+let PostData={lang:"java",code:this.state.value};
+console.log(PostData);
+//axios call to /user/submit
+//pipe the response to output component
 }
 onClose(){
   this.setState({output:false});
 }
 onRun(){
-  console.log("Run  \n " + this.state.value);
+  this.setState({output:true});
+  let PostData={lang:"java",code:this.state.value};
+  console.log(PostData);
+  //axios call to /user/run
+  //pipe the response to output component
+
 }
 
   onLoad() {

@@ -9,7 +9,6 @@ return (
 In mathematics, the factorial of a positive integer n, denoted by n!,<br/> is the product of all positive integers less than or equal to n.
 </h5>
 
-<br/>
 <h3>Test Cases</h3>
 Input type : an integer<br/>
 Output type : an integer<br/>
