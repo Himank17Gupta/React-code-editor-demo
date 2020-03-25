@@ -3,7 +3,9 @@ function OutPut(props){
 
 return (
     <div>
-        <h5 className="float-right">close</h5>
+        <button type="button" class="close" aria-label="Close" onClick={props.close}>
+        <span aria-hidden="true">&times;</span>
+        </button>
 <h2>    
     Output results
 </h2>

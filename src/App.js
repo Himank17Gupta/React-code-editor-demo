@@ -34,7 +34,9 @@ onSubmit(){
 console.log("Submit  \n "+ this.state.value);
 this.setState({output:true});
 }
-
+onClose(){
+  this.setState({output:false});
+}
 onRun(){
   console.log("Run  \n " + this.state.value);
 }
@@ -95,7 +97,7 @@ onRun(){
       value: defaultValue,
       placeholder: "complete function given below",
       theme: "monokai",
-      mode: "javascript",
+      mode: "java",
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
       fontSize: 14,
@@ -114,11 +116,18 @@ onRun(){
     this.setBoolean = this.setBoolean.bind(this);
     this.onSubmit=this.onSubmit.bind(this);
     this.onRun=this.onRun.bind(this);
+    this.onClose=this.onClose.bind(this);
   }
   render() {
     return (
+      <>
+     
+        <nav class="navbar navbar-light bg-light">
+        <h3>Online Code Editor</h3>
+        </nav>
+        <br/>
       <div className="columns">
-        <div className="row">
+        <div className="row" style={{margin:0}}>
           <div className="col-md">
             <label>Language:</label>
             <p className="control">
@@ -283,11 +292,11 @@ onRun(){
           </div>
         </div>
         <br/>
-        <div className="row">
+        <div className="row" style={{margin:0}}>
           <div className="col-md">
             <Question/>
             <br/>
-            {this.state.output?<OutPut/>:<></>}
+            {this.state.output?<OutPut  close={this.onClose} />:<></>}
           </div>
         <div className="examples col-md">
           <AceEditor
@@ -324,6 +333,7 @@ onRun(){
         </div>
       </div>
       </div>
+    </>
     );
   }
 }
