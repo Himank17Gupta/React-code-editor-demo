@@ -12,6 +12,7 @@ import "ace-builds/src-min-noconflict/ext-searchbox";
 import "ace-builds/src-min-noconflict/ext-language_tools";
 import Question from "../src/Question";
 import OutPut from './OutPut';
+import Axios from 'axios';
 
 const languages = [ "javascript","java","c_cpp","python","typescript","sql"];
 
@@ -27,7 +28,7 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 
 
 const defaultValue = `//Complete function given below
-public function factorial(int n){
+static int factorial(int n){
 
 }
 `;
@@ -37,24 +38,44 @@ class App extends React.Component {
 onSubmit(){
   this.setState({output:true});
 console.log("Submit  \n "+ this.state.value);
-let PostData={lang:"java",code:this.state.value};
+let PostData={lang:this.state.mode,code:this.state.value};
 console.log(PostData);
 //axios call to /user/submit
+
+Axios.post('http://localhost:5000/user/submit',PostData).then((res)=>{
+  console.log(res.data);
+  this.setState({results:res.data});
+}).catch((err)=>{
+  console.log(err);
+});
 //pipe the response to output component
+
 }
-onClose(){
-  this.setState({output:false});
-}
+
 onRun(){
   this.setState({output:true});
-  let PostData={lang:"java",code:this.state.value};
+  let PostData={lang:this.state.mode,code:this.state.value};
   console.log(PostData);
   //axios call to /user/run
+
+  Axios.post('http://localhost:5000/user/run',PostData).then((res)=>{
+    console.log(res.data);
+    this.setState({results:res.data});
+  }).catch((err)=>{
+    console.log(err);
+  });
   //pipe the response to output component
 
 }
 
-  onLoad() {
+onClose(){
+  this.setState({output:false});
+}
+ 
+onConsole(){
+  this.setState({output:!this.state.output});
+}
+onLoad() {
     console.log("i've loaded");
   }
 
@@ -119,7 +140,8 @@ onRun(){
       highlightActiveLine: true,
       enableSnippets: true,
       showLineNumbers: true,
-      output:false
+      output:false,
+      results:[],
     };
     this.setPlaceholder = this.setPlaceholder.bind(this);
     this.setTheme = this.setTheme.bind(this);
@@ -130,6 +152,7 @@ onRun(){
     this.onSubmit=this.onSubmit.bind(this);
     this.onRun=this.onRun.bind(this);
     this.onClose=this.onClose.bind(this);
+    this.onConsole=this.onConsole.bind(this);
   }
   render() {
     return (
@@ -309,7 +332,20 @@ onRun(){
           <div className="col-md">
             <Question/>
             <br/>
-            {this.state.output?<OutPut  close={this.onClose} />:<></>}
+            {this.state.output?
+            
+            //<OutPut results={this.state.results} close={this.onClose} />:
+            
+            <div>
+           <button type="button" class="close" aria-label="Close" onClick={this.onClose}>
+           <span aria-hidden="true">&times;</span>
+           </button>
+           <h2>Output results</h2>
+           <p>
+          {this.state.results.map(result =>{return (result)}) }
+            </p>
+          </div>: <></>}
+          
           </div>
         <div className="examples col-md">
           <AceEditor
@@ -343,6 +379,8 @@ onRun(){
            <button className="btn btn-info " onClick={this.onRun}>Run</button>
           &nbsp;&nbsp;
           <button className="btn btn-info " onClick={this.onSubmit}>Submit</button>
+          &nbsp;&nbsp;
+          <button className="btn btn-info " onClick={this.onConsole}>Console</button>
         </div>
       </div>
       </div>
