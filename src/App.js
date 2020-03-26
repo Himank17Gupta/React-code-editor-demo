@@ -14,7 +14,9 @@ import Question from "../src/Question";
 import OutPut from './OutPut';
 import Axios from 'axios';
 
-const languages = [ "javascript","java","c_cpp","python","typescript","sql"];
+const languages = [ "javascript","java","c_cpp","python"];
+
+const languagesForSelect=["java","C++","javascipt","sql","python"];
 
 const themes = [ "monokai", "github", "tomorrow", "kuroir", "twilight", "xcode", "textmate", "solarized_dark", "solarized_light", "terminal"];
 
@@ -27,7 +29,7 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 /*eslint-disable no-alert, no-console */
 
 
-const defaultValue = `//Complete function given below
+var defaultValue = `//Complete function given below
 static int factorial(int n){
 
 }
@@ -37,7 +39,7 @@ class App extends React.Component {
 
 onSubmit(){
   this.setState({output:true});
-console.log("Submit  \n "+ this.state.value);
+
 let PostData={lang:this.state.mode,code:this.state.value};
 console.log(PostData);
 //axios call to /user/submit
@@ -111,9 +113,28 @@ onLoad() {
     });
   }
   setMode(e) {
+  var str="";
+    if(e.target.value=="java"){
+       str=`//Complete function given below
+  static int factorial(int n){
+  
+  }
+  `;
+    }
+
+    if(e.target.value=="C++"){
+        str=`//Complete function given below
+    unsigned int factorial(unsigned int n){
+      
+      }
+      `;
+    }
+  
     this.setState({
-      mode: e.target.value
+      mode: e.target.value,
+      value:str
     });
+  
   }
   setBoolean(name, value) {
     this.setState({
@@ -125,6 +146,7 @@ onLoad() {
       fontSize: parseInt(e.target.value, 10)
     });
   }
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -153,11 +175,13 @@ onLoad() {
     this.onRun=this.onRun.bind(this);
     this.onClose=this.onClose.bind(this);
     this.onConsole=this.onConsole.bind(this);
+  
   }
   render() {
+
+
     return (
-      <>
-     
+  <>    
         <nav class="navbar navbar-light bg-light">
         <h3>Online Code Editor</h3>
         </nav>
@@ -173,7 +197,7 @@ onLoad() {
                   onChange={this.setMode}
                   value={this.state.mode}
                 >
-                  {languages.map(lang => (
+                  {languagesForSelect.map(lang => (
                     <option key={lang} value={lang}>
                       {lang}
                     </option>
